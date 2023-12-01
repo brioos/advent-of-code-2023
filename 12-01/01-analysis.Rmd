@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(readxl)
+library(stringr)
+library(tidyverse)
+library(strex)
+```
+
+
+```{r}
+input <- read.table("input1201.txt")
+
+inputnum <- input %>%
+  mutate(num = sapply(str_extract_all(V1, "[0-9]+"), paste, collapse = ""),
+         numfin = gsub(" ", "", paste(substr(num, 1, 1), substr(num, str_length(num), str_length(num)))))
+
+sum(as.numeric(inputnum$numfin))
+```
+
+```{r}
+
+inputnum <- input %>%
+  mutate(num = str_replace_all(V1, c("twone" = "21", "threeight" = "38", "eighthree" = "83", "oneight" = "18", "eightwo" = "82", "fiveight" ="58", "sevenine" ="79", "nineight" = "98", "one" = "1", "two" = "2", "three" = "3",  "four" = "4", "five" = "5", "six" = "6", "seven" = "7",  "eight" = "8",  "nine" = "9")),
+         numnum = sapply(str_extract_all(num, "[0-9]+"), paste, collapse = ""),
+         numfin = gsub(" ", "", paste(substr(numnum, 1, 1), substr(numnum, str_length(numnum), str_length(numnum)))))
+sum(as.numeric(inputnum$numfin))
+```
+
