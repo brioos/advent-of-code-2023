@@ -1,0 +1,47 @@
+---
+title: "12.02"
+output: html_notebook
+---
+
+```{r setup}
+library(readxl)
+library(stringr)
+library(tidyverse)
+```
+
+
+
+```{r import}
+input <- read.table("1202input.txt", header = FALSE, sep = ":")
+```
+
+
+```{r part1}
+inputidy <- input %>% 
+  separate_rows(V2, sep = ";|,") %>% 
+  separate(V2, into = c("space", "num", "color"), sep = " ") %>%
+  mutate(num = as.numeric(num))
+
+filt <- inputidy %>%
+  filter((color == "green" & num > 13) | (color == "blue" & num > 14) | (color == "red" & num > 12)) %>% 
+  distinct(V1)
+
+result <- input %>%
+  anti_join(filt, by = "V1") %>% 
+  separate(V1, into = c("group", "number"))
+
+sum(as.numeric(result$number))
+
+```
+
+```{r part2}
+resultwo <- inputidy %>% 
+  group_by(V1, color) %>% 
+  summarize(max = max(num)) %>%
+  group_by(V1) %>%
+  summarize(multy = prod(max))
+
+sum(resultwo$multy)
+
+```
+
